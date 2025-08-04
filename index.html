@@ -1,0 +1,232 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Care to Crown Medical Booking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #FFD700;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        #user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+        }
+        .form-container, .dashboard {
+            margin-top: 20px;
+        }
+        .form-container input, .form-container select, .form-container button {
+            margin: 5px;
+            padding: 8px;
+            width: calc(100% - 16px);
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .toggle-password {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        #notification {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        #calendar, #patient-calendar, #pharmacist-calendar {
+            margin-top: 20px;
+        }
+        .fc-event {
+            cursor: pointer;
+        }
+        .fc-event.available {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+        .fc-event.reserved {
+            background-color: #FFD700;
+            border-color: #FFD700;
+        }
+        .fc-event.blocked {
+            background-color: #FF0000;
+            border-color: #FF0000;
+        }
+        #booking-form {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+        }
+        #pickup-location {
+            display: none;
+        }
+        #prescription-file {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="user-info"></div>
+        <h1>Care to Crown Medical Booking System</h1>
+        <div id="notification"></div>
+        <div id="login-form" class="form-container">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Username">
+            <div style="position: relative;">
+                <input type="password" id="password" placeholder="Password">
+                <span id="toggle-password" class="toggle-password">👁️</span>
+            </div>
+            <select id="role">
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+                <option value="transporter">Transporter</option>
+                <option value="pharmacist">Pharmacist</option>
+            </select>
+            <button onclick="loginUser(event)">Login</button>
+            <button onclick="showSignupForm()">Sign Up</button>
+        </div>
+        <div id="signup-form" class="form-container" style="display: none;">
+            <h2>Sign Up</h2>
+            <input type="text" id="signup-name" placeholder="Full Name">
+            <input type="text" id="signup-username" placeholder="Username">
+            <div style="position: relative;">
+                <input type="password" id="signup-password" placeholder="Password">
+                <span id="toggle-signup-password" class="toggle-password">👁️</span>
+            </div>
+            <select id="signup-role">
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+                <option value="transporter">Transporter</option>
+                <option value="pharmacist">Pharmacist</option>
+            </select>
+            <input type="text" id="signup-location" placeholder="Location (optional)">
+            <input type="text" id="signup-cellphone" placeholder="Cellphone (optional, e.g., whatsapp:+26772120599)">
+            <input type="email" id="signup-email" placeholder="Email (optional)">
+            <button onclick="signupUser(event)">Sign Up</button>
+            <button onclick="showLoginForm()">Back to Login</button>
+        </div>
+        <div id="doctor-dashboard" class="dashboard" style="display: none;">
+            <h2>Doctor Dashboard</h2>
+            <button onclick="initGoogleAuth()">Link Google Calendar</button>
+            <button onclick="logout()">Logout</button>
+            <div id="calendar"></div>
+            <h3>Your Appointments</h3>
+            <div id="doctor-appointments"></div>
+        </div>
+        <div id="patient-dashboard" class="dashboard" style="display: none;">
+            <h2>Patient Dashboard</h2>
+            <button onclick="logout()">Logout</button>
+            <select id="role-select">
+                <option value="doctor">Doctor</option>
+                <option value="pharmacist">Pharmacist</option>
+            </select>
+            <select id="provider-select">
+                <option value="">Select Provider</option>
+            </select>
+            <div id="patient-calendar"></div>
+            <div id="booking-form">
+                <h3>Book Appointment</h3>
+                <input type="hidden" id="booking-time">
+                <input type="hidden" id="booking-role">
+                <label><input type="checkbox" id="transport-required" onclick="togglePickupLocation()"> Require Transport</label>
+                <input type="text" id="pickup-location" placeholder="Pickup Location">
+                <input type="file" id="prescription-file" accept=".pdf,.jpg,.jpeg,.png">
+                <button onclick="bookAppointment(event)">Book Appointment</button>
+            </div>
+            <h3>Your Appointments</h3>
+            <div id="patient-appointments"></div>
+        </div>
+        <div id="transporter-dashboard" class="dashboard" style="display: none;">
+            <h2>Transporter Dashboard</h2>
+            <button onclick="logout()">Logout</button>
+            <h3>Ride Requests</h3>
+            <div id="ride-list"></div>
+        </div>
+        <div id="pharmacist-dashboard" class="dashboard" style="display: none;">
+            <h2>Pharmacist Dashboard</h2>
+            <button onclick="initGoogleAuth()">Link Google Calendar</button>
+            <button onclick="logout()">Logout</button>
+            <div id="pharmacist-calendar"></div>
+            <h3>Your Appointments</h3>
+            <div id="pharmacist-appointments"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

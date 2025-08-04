@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #4CAF50; /* Green background */
+    color: #FFD700; /* Gold text */
+}
+
+h1 {
+    text-align: center;
+    color: #FFD700; /* Gold heading */
+    margin-bottom: 20px;
+}
+
+#notification {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #FFD700; /* Gold notification */
+    color: #4CAF50; /* Green text */
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+}
+
+#login-form, #signup-form, #doctor-dashboard, #patient-dashboard, #transporter-dashboard, #pharmacist-dashboard {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    color: #4CAF50; /* Green text for forms */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, select, button {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #FFD700; /* Gold border */
+    border-radius: 4px;
+}
+
+button {
+    background-color: #FFD700; /* Gold button */
+    color: #4CAF50; /* Green text */
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #E6C200; /* Darker gold on hover */
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #FFD700; /* Gold toggle */
+}
+
+#doctor-appointments, #patient-appointments, #ride-list, #pharmacist-appointments {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #FFD700; /* Gold border */
+    border-radius: 4px;
+    background-color: #4CAF50; /* Green background */
+    color: #FFD700; /* Gold text */
+}
+
+#doctor-appointments div, #patient-appointments div, #ride-list div, #pharmacist-appointments div {
+    padding: 5px;
+    border-bottom: 1px solid #FFD700; /* Gold separator */
+}
+
+#calendar, #patient-calendar, #pharmacist-calendar {
+    margin-top: 20px;
+    background-color: white;
+}
+
+.fc-event-available {
+    background-color: #4CAF50 !important; /* Green for available slots */
+    border-color: #4CAF50 !important;
+    color: #FFD700 !important; /* Gold text */
+}
+
+.fc-event-reserved {
+    background-color: #FFD700 !important; /* Gold for reserved slots */
+    border-color: #FFD700 !important;
+    color: #4CAF50 !important; /* Green text */
+}
+
+.fc-event-blocked {
+    background-color: #FF0000 !important; /* Red for blocked slots */
+    border-color: #FF0000 !important;
+    color: #FFFFFF !important; /* White text */
+}
