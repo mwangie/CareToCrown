@@ -1,18 +1,18 @@
 {
-  "name": "care-to-crown",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.21.2",
-    "googleapis": "^92.0.0",
-    "multer": "^1.4.4",
-    "nodemailer": "^6.10.1",
-    "twilio": "^3.84.1"
-  },
+       "name": "care-to-crown",
+       "version": "1.0.0",
+       "scripts": {
+         "start": "node server.js"
+       },
+       "dependencies": {
+         "express": "^4.17.1",
+         "googleapis": "^92.0.0",
+         "cors": "^2.8.5",
+         "twilio": "^3.71.1",
+         "dotenv": "^10.0.0",
+         "nodemailer": "^6.7.2",
+         "multer": "^1.4.4"
+       },
   "main": "oldserver.js",
   "repository": {
     "type": "git",
