@@ -8,24 +8,6 @@ const nodemailer = require('nodemailer');
 const multer = require('multer');
 require('dotenv').config();
 
-const express = require('express');
-     const path = require('path');
-     const fs = require('fs');
-     const app = express();
-     app.use(express.static(path.join(__dirname, '.')));
-     app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
-     const TOKEN_PATH = path.join(__dirname, 'Uploads', 'tokens.json');
-     // ... existing Google Calendar, Twilio, Nodemailer code ...
-     // Example: Save Google OAuth tokens
-     // fs.writeFileSync(TOKEN_PATH, JSON.stringify(token));
-     // Load tokens
-     // if (fs.existsSync(TOKEN_PATH)) {
-     //   const token = JSON.parse(fs.readFileSync(TOKEN_PATH));
-     // }
-     app.listen(process.env.PORT || 3001, () => {
-       console.log(`Server running at http://localhost:${process.env.PORT || 3001}`);
-     });
-
 const app = express();
 app.use(cors({
     origin: (origin, callback) => {
