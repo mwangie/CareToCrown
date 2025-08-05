@@ -1,69 +1,14 @@
 {
-  "doctors": [
-    {
-      "id": 1,
-      "name": "Dr. Alice Smith",
-      "cellphone": "whatsapp:+26772120599",
-      "email": "mwangieb@gmail.com"
-    },
-    {
-      "id": 2,
-      "name": "Dr Alice Phiri",
-      "username": "alice",
-      "password": "pass123",
-      "location": "Maruapula, Gaborone",
-      "cellphone": "+26772120599",
-      "email": "mwangieb@gmail.com"
-    }
-  ],
-  "pharmacists": [
-    {
-      "id": 1,
-      "name": "Pharmacist Jane",
-      "cellphone": "whatsapp:+26772120599",
-      "email": "mwangieb@gmail.com"
-    },
-    {
-      "id": 2,
-      "name": "Pharma Sara",
-      "username": "sara",
-      "password": "4321",
-      "location": "Maruapula, Gaborone",
-      "cellphone": "+26772120599",
-      "email": "mwangieb@gmail.com"
-    }
-  ],
-  "patients": [
-    {
-      "id": 1,
-      "name": "John Doe",
-      "cellphone": "whatsapp:+26772120599",
-      "email": "mwangieb@gmail.com"
-    },
-    {
-      "id": 2,
-      "name": "John Daka",
-      "username": "john",
-      "password": "1234",
-      "location": "Maruapula, Gaborone",
-      "cellphone": "+260965151792",
-      "email": "mwangie@rbvaluers.bw"
-    }
-  ],
-  "transporters": [
-    {
-      "id": 1,
-      "name": "YangoTaxi",
-      "cellphone": "whatsapp:+26772120599"
-    },
-    {
-      "id": 2,
-      "name": "Yango Taxi",
-      "username": "yango",
-      "password": "4321",
-      "location": "Maruapula, Gaborone",
-      "cellphone": "+260965151792",
-      "email": "mwangieb@gmail.com"
-    }
-  ]
-}
+       "doctors": [
+         { "id": 1, "name": "Dr. Alice Smith", "username": "alice", "password": "pass123", "location": "Riverwalk Mall, Gaborone", "cellphone": "whatsapp:+26772120599", "email": "mwangieb@gmail.com" }
+       ],
+       "pharmacists": [
+         { "id": 1, "name": "Pharmacist Jane", "username": "jane", "password": "pharm123", "cellphone": "whatsapp:+26772120599", "email": "mwangieb@gmail.com" }
+       ],
+       "patients": [
+         { "id": 1, "name": "John Doe", "username": "john", "password": "1234", "location": "Maruapula, Gaborone", "cellphone": "whatsapp:+26772120599", "email": "mwangieb@gmail.com" }
+       ],
+       "transporters": [
+         { "id": 1, "name": "YangoTaxi", "username": "yango", "password": "4321", "cellphone": "whatsapp:+26772120599" }
+       ]
+     }
