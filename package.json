@@ -9,6 +9,7 @@
               "dotenv": "^10.0.0",
               "express": "^4.17.1",
               "googleapis": "^92.0.0",
+              "mongodb": "^6.18.0",
               "multer": "^1.4.4",
               "nodemailer": "^6.7.2",
               "twilio": "^3.71.1"
@@ -25,6 +26,5 @@
               "url": "https://github.com/mwangie/CareToCrown/issues"
        },
        "homepage": "https://github.com/mwangie/CareToCrown#readme",
-       "devDependencies": {},
        "description": ""
 }
