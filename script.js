@@ -108,7 +108,7 @@ async function loginUser(event) {
         const password = document.getElementById('password').value;
         const role = document.getElementById('role').value;
 
-        const response = await fetch(`${BACKEND_URL}/login`, {
+        const response = await fetch(`/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ role, username, password })
@@ -147,7 +147,7 @@ async function signupUser(event) {
         const cellphone = document.getElementById('signup-cellphone').value || '';
         const email = document.getElementById('signup-email').value || '';
 
-        const response = await fetch(`${BACKEND_URL}/signup`, {
+        const response = await fetch(`/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ role, name, username, password, location, cellphone, email })
@@ -176,17 +176,17 @@ async function signupUser(event) {
     }
 }
 
-function togglePassword(fieldId, toggleId) {
-    const field = document.getElementById(fieldId);
-    const toggle = document.getElementById(toggleId);
-    if (field.type === 'password') {
-        field.type = 'text';
-        toggle.textContent = '🙈';
-    } else {
-        field.type = 'password';
-        toggle.textContent = '👁️';
-    }
-}
+// function togglePassword(fieldId, toggleId) {
+//     const field = document.getElementById(fieldId);
+//     const toggle = document.getElementById(toggleId);
+//     if (field.type === 'password') {
+//         field.type = 'text';
+//         toggle.textContent = '🙈';
+//     } else {
+//         field.type = 'password';
+//         toggle.textContent = '👁️';
+//     }
+// }
 
 function togglePickupLocation() {
     const transportRequired = document.getElementById('transport-required').checked;
@@ -204,7 +204,7 @@ async function initGoogleAuth() {
             throw new Error('No user logged in or invalid user ID');
         }
         console.log('[DEBUG] Initiating Google Calendar auth for', currentUser.role, 'Id:', currentUser.id);
-        const url = `${BACKEND_URL}/auth/google?doctorId=${currentUser.id}`;
+        const url = `/auth/google?doctorId=${currentUser.id}`;
         console.log('[DEBUG] Fetching from:', url);
         const response = await fetch(url, {
             method: 'GET',
@@ -282,7 +282,7 @@ function initDoctorCalendar() {
                 console.log('[DEBUG] Doctor calendar event clicked:', info.event);
                 if (info.event.extendedProps.status === 'available') {
                     if (confirm(`Block slot at ${formatDate(info.event.start)}?`)) {
-                        fetch(`${BACKEND_URL}/calendar/block`, {
+                        fetch(`/calendar/block`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ doctorId: currentUser.id, startTime: info.event.start.toISOString() })
@@ -297,7 +297,7 @@ function initDoctorCalendar() {
                     }
                 } else if (info.event.extendedProps.status === 'blocked') {
                     if (confirm(`Allow slot at ${formatDate(info.event.start)}?`)) {
-                        fetch(`${BACKEND_URL}/calendar/allow`, {
+                        fetch(`/calendar/allow`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ doctorId: currentUser.id, eventId: info.event.id })
@@ -315,9 +315,9 @@ function initDoctorCalendar() {
                 }
             },
             events: async (info, successCallback, failureCallback) => {
-                console.log('[DEBUG] Fetching doctor events from:', `${BACKEND_URL}/calendar/events?doctorId=${currentUser.id}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
+                console.log('[DEBUG] Fetching doctor events from:', `/calendar/events?doctorId=${currentUser.id}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
                 try {
-                    const response = await fetch(`${BACKEND_URL}/calendar/events?doctorId=${currentUser.id}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
+                    const response = await fetch(`/calendar/events?doctorId=${currentUser.id}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
                     console.log('[DEBUG] Fetch response:', response.status, response.statusText);
                     if (!response.ok) {
                         const errorText = await response.text();
@@ -345,7 +345,7 @@ async function displayDoctorAppointments() {
     const appointmentList = document.getElementById('doctor-appointments');
     const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
     try {
-        const response = await fetch(`${BACKEND_URL}/providers`);
+        const response = await fetch(`/providers`);
         console.log('[DEBUG] Providers response for doctor appointments:', response.status, response.statusText);
         if (!response.ok) {
             const errorText = await response.text();
@@ -375,8 +375,8 @@ async function initPatientDashboard() {
     const roleSelect = document.getElementById('role-select');
     const providerSelect = document.getElementById('provider-select');
     try {
-        console.log('[DEBUG] Fetching providers from:', `${BACKEND_URL}/providers`);
-        const response = await fetch(`${BACKEND_URL}/providers`);
+        console.log('[DEBUG] Fetching providers from:', `/providers`);
+        const response = await fetch(`/providers`);
         console.log('[DEBUG] Providers response:', response.status, response.statusText);
         if (!response.ok) {
             const errorText = await response.text();
@@ -460,9 +460,9 @@ function initPatientCalendar(providerId, role) {
                 }
             },
             events: async (info, successCallback, failureCallback) => {
-                console.log('[DEBUG] Fetching patient events from:', `${BACKEND_URL}/calendar/events?doctorId=${providerId}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
+                console.log('[DEBUG] Fetching patient events from:', `/calendar/events?doctorId=${providerId}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
                 try {
-                    const response = await fetch(`${BACKEND_URL}/calendar/events?doctorId=${providerId}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
+                    const response = await fetch(`/calendar/events?doctorId=${providerId}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
                     console.log('[DEBUG] Fetch response:', response.status, response.statusText);
                     if (!response.ok) {
                         const errorText = await response.text();
@@ -490,7 +490,7 @@ async function displayPatientAppointments() {
     const appointmentList = document.getElementById('patient-appointments');
     const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
     try {
-        const response = await fetch(`${BACKEND_URL}/providers`);
+        const response = await fetch(`/providers`);
         console.log('[DEBUG] Providers response for patient appointments:', response.status, response.statusText);
         if (!response.ok) {
             const errorText = await response.text();
@@ -543,7 +543,7 @@ async function bookAppointment(event) {
             throw new Error('Prescription file required for pharmacist appointment');
         }
         console.log('[DEBUG] Booking appointment:', { providerId, role, startTime, transportRequired, pickupLocation });
-        const response = await fetch(`${BACKEND_URL}/calendar/book`, {
+        const response = await fetch(`/calendar/book`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ doctorId: providerId, patientName: currentUser.name, startTime, role })
@@ -571,7 +571,7 @@ async function bookAppointment(event) {
             waitingList.push(appointment);
             localStorage.setItem('waitingList', JSON.stringify(waitingList));
             console.log('[DEBUG] Sending WhatsApp notification to transporter');
-            await fetch(`${BACKEND_URL}/notify-transporter`, {
+            await fetch(`/notify-transporter`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ transporterId: 1, appointment })
@@ -583,7 +583,7 @@ async function bookAppointment(event) {
             formData.append('pharmacistId', providerId);
             formData.append('patientName', currentUser.name);
             formData.append('startTime', startTime);
-            await fetch(`${BACKEND_URL}/prescription/upload`, {
+            await fetch(`/prescription/upload`, {
                 method: 'POST',
                 body: formData
             }).then(response => response.json()).then(data => {
@@ -609,7 +609,7 @@ async function initTransporterDashboard() {
     const rideList = document.getElementById('ride-list');
     const waitingList = JSON.parse(localStorage.getItem('waitingList')) || [];
     try {
-        const response = await fetch(`${BACKEND_URL}/providers`);
+        const response = await fetch(`/providers`);
         console.log('[DEBUG] Providers response for rides:', response.status, response.statusText);
         if (!response.ok) {
             const errorText = await response.text();
@@ -655,7 +655,7 @@ async function initPharmacistCalendar() {
                     if (appointment && confirm(`Mark prescription for ${appointment.patientName} as ready?`)) {
                         const pickupTime = prompt('Enter pickup date and time (YYYY-MM-DD HH:MM):');
                         if (pickupTime) {
-                            fetch(`${BACKEND_URL}/prescription/ready`, {
+                            fetch(`/prescription/ready`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -676,9 +676,9 @@ async function initPharmacistCalendar() {
                 }
             },
             events: async (info, successCallback, failureCallback) => {
-                console.log('[DEBUG] Fetching pharmacist events from:', `${BACKEND_URL}/calendar/events?doctorId=${currentUser.id}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
+                console.log('[DEBUG] Fetching pharmacist events from:', `/calendar/events?doctorId=${currentUser.id}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
                 try {
-                    const response = await fetch(`${BACKEND_URL}/calendar/events?doctorId=${currentUser.id}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
+                    const response = await fetch(`/calendar/events?doctorId=${currentUser.id}&start=${info.start.toISOString()}&end=${info.end.toISOString()}`);
                     console.log('[DEBUG] Fetch response:', response.status, response.statusText);
                     if (!response.ok) {
                         const errorText = await response.text();
@@ -706,7 +706,7 @@ async function displayPharmacistAppointments() {
     const appointmentList = document.getElementById('pharmacist-appointments');
     const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
     try {
-        const response = await fetch(`${BACKEND_URL}/providers`);
+        const response = await fetch(`/providers`);
         console.log('[DEBUG] Providers response for pharmacist appointments:', response.status, response.statusText);
         if (!response.ok) {
             const errorText = await response.text();
@@ -717,7 +717,7 @@ async function displayPharmacistAppointments() {
             .filter(a => a.doctorId === currentUser.id && a.role === 'pharmacist')
             .map(a => {
                 const patient = patients.find(p => p.id === a.patientId) || { name: 'Unknown Patient', cellphone: 'N/A', email: 'N/A' };
-                const prescriptionLink = a.prescriptionFile ? `<a href="${BACKEND_URL}/uploads/${a.prescriptionFile}" target="_blank">View Prescription</a>` : 'No Prescription';
+                const prescriptionLink = a.prescriptionFile ? `<a href="/uploads/${a.prescriptionFile}" target="_blank">View Prescription</a>` : 'No Prescription';
                 return `
                     <div style="margin-bottom: 10px; padding: 10px; border: 1px solid #4CAF50; border-radius: 5px;">
                         <strong>Patient:</strong> ${patient.name}<br>
@@ -743,4 +743,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         showLoginForm();
     }
+    document.getElementById('toggle-password').addEventListener('click', () => {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+  document.getElementById('toggle-password').textContent = type === 'password' ? '👁️' : '🙈';
+});
 });

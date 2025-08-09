@@ -138,6 +138,16 @@
         #prescription-file {
             display: none;
         }
+
+  #toggle-password {
+    color: #4CAF50;
+    margin-left: -30px;
+    position: relative;
+    top: 2px;
+  }
+  #toggle-password:hover {
+    color: #FFD700;
+  }
     </style>
 </head>
 <body>
@@ -148,9 +158,9 @@
         <div id="login-form" class="form-container">
             <h2>Login</h2>
             <input type="text" id="username" placeholder="Username">
-            <div style="position: relative;">
-                <input type="password" id="password" placeholder="Password">
-                <span id="toggle-password" class="toggle-password">👁️</span>
+            <div>
+                <input type="password" id="password" name="password">
+                <span id="toggle-password" style="cursor: pointer;">👁️</span>
             </div>
             <select id="role">
                 <option value="patient">Patient</option>
