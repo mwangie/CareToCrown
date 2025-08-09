@@ -108,7 +108,7 @@ async function loginUser(event) {
         const password = document.getElementById('password').value;
         const role = document.getElementById('role').value;
 
-        const response = await fetch(`/login`, {
+        const response = await fetch('/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ role, username, password })
@@ -147,7 +147,11 @@ async function signupUser(event) {
         const cellphone = document.getElementById('signup-cellphone').value || '';
         const email = document.getElementById('signup-email').value || '';
 
+<<<<<<< HEAD
         const response = await fetch(`/signup`, {
+=======
+        const response = await fetch('/signup', {
+>>>>>>> 3f1e2d002bf84cba3ff0ace6aff37ae2294cca42
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ role, name, username, password, location, cellphone, email })
@@ -743,10 +747,4 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         showLoginForm();
     }
-    document.getElementById('toggle-password').addEventListener('click', () => {
-    const passwordInput = document.getElementById('password');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-  document.getElementById('toggle-password').textContent = type === 'password' ? '👁️' : '🙈';
-});
 });
