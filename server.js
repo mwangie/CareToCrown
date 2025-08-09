@@ -9,7 +9,8 @@ const express = require('express');
        app.use(express.static(path.join(__dirname, '.')));
        app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 
-       const uri = process.env.MONGODB_URI || 'mongodb+srv://C2CMongo:<CP2025&6>@c2ccluster.3ewmclf.mongodb.net/?retryWrites=true&w=majority&appName=C2CCluster;
+       const uri = 'mongodb+srv://C2CMongo:<db_password>@c2ccluster.3ewmclf.mongodb.net/?retryWrites=true&w=majority&appName=C2CCluster';
+       
        const client = new MongoClient(uri);
 
        async function connectDB() {
