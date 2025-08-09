@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://localhost:3001';
+const BACKEND_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
 let currentUser = null;
 
 function initializeStorage() {
